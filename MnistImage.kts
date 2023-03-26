@@ -4,8 +4,8 @@ import java.util.zip.GZIPInputStream
 import javax.imageio.*
 import java.awt.image.*
 
-val labelPath = Paths.get("../perceptron/train-labels-idx1-ubyte.gz")
-val imagePath = Paths.get("../perceptron/train-images-idx3-ubyte.gz")
+val labelPath = Paths.get("train-labels-idx1-ubyte.gz")
+val imagePath = Paths.get("train-images-idx3-ubyte.gz")
 
 val labelStream = DataInputStream(GZIPInputStream(Files.newInputStream(labelPath)))
 val imageStream = DataInputStream(GZIPInputStream(Files.newInputStream(imagePath)))
