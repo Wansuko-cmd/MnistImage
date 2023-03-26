@@ -19,12 +19,10 @@ val imageSize = imageStream.readInt()
 val imageHeight = imageStream.readInt()
 val imageWidth = imageStream.readInt()
 
-val numbers = randomIntWithRange(args.getOrNull(0)?.toIntOrNull() ?: 1, labelSize)
+(0..9).forEach { number -> File(number.toString()).mkdir() }
+val indexNumber = List(10) { it to 0 }.toMap().toMutableMap()
 
-numbers.forEach { number ->
-    labelStream.skipBytes(number - 1)
-    imageStream.skipBytes(imageHeight * imageWidth * (number - 1))
-
+for (number in 1..imageSize) {
     val label = labelStream.readUnsignedByte()
 
     val image = (1..imageHeight * imageWidth).map { imageStream.readUnsignedByte() }
@@ -37,18 +35,10 @@ numbers.forEach { number ->
             outputImage.setRGB(width, height, image[height][width].toRGB())
         }
     }
-    ImageIO.write(outputImage, "PNG", File("i${number}_label${label}.png"))
+    ImageIO.write(outputImage, "PNG", File("${label}/${indexNumber[label]?.also { indexNumber[label] = indexNumber[label]!! + 1 }.toString()}.png"))
 }
 
 fun Int.toRGB(): Int {
     assert(this < 256)
     return -16777216 + (16 * 16 * 16 * 16 * this) + (16 * 16 * this) + this
-}
-
-fun randomIntWithRange(num: Int, max: Int): List<Int> {
-    if (num > max) throw Exception()
-    while (true) {
-        val numbers = (1..num).shuffled().take(num)
-        if (numbers.sum() < max) return numbers
-    }
 }
